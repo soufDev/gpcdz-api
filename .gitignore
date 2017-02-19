@@ -1,0 +1,9 @@
+# Created by .ignore support plugin (hsz.mobi)
+Supprimerait .gitignore
+Supprimerait gpcdz_api/__pycache__/
+Supprimerait .idea/dataSources.xml
+Supprimerait .idea/dataSources/
+Supprimerait .idea/vcs.xml
+Supprimerait db.sqlite3
+Supprimerait geolocation/migrations/
+
