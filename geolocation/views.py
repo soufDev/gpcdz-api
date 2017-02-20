@@ -1,66 +1,120 @@
-from django.http.response import HttpResponse
-from django.shortcuts import render
+from django.http.response import Http404
 
 # Create your views here.
-from rest_framework.parsers import JSONParser
-from rest_framework.renderers import JSONRenderer
+from rest_framework import generics, status
+
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from geolocation.models import GeoLocation
 from geolocation.serializers import GeoLocationSerializer
 
 
-class JSONResponse(HttpResponse):
-    """
-    HttpResponse qui nous permetera d'avoir nos objet en JSON
-    """
-    def __init__(self, data, **kwargs):
-        content = JSONRenderer().render(data)
-        kwargs['content_type'] = 'application/json'
-        super(JSONResponse, self).__init__(content, **kwargs)
+from time import time
+import requests
 
 
-def geolocation_list(request):
+class GeolocationList(generics.ListCreateAPIView):
+    queryset = GeoLocation.objects.all()
+    serializer_class = GeoLocationSerializer
+
+
+class GeolocationDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = GeoLocation.objects.all()
+    serializer_class = GeoLocationSerializer
+
+
+class Geolocation_List(APIView):
     """
     La liste de tout nos objets
     :return:
     """
-    if request.method == 'GET':
-        geolocation_list = GeoLocation.objects.all()
-        serializer = GeoLocationSerializer(geolocation_list, many=True)
-        return JSONResponse(serializer.data)
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = GeoLocationSerializer(data=data)
+    def get(self, request, format=None):
+        geolocations = GeoLocation.objects.all()
+        serializer = GeoLocationSerializer(geolocations, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = GeoLocationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return JSONResponse(serializer.data, status=201)
-        return JSONResponse(serializer.errors, status=400)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-def geolocation_detail(request, id):
-    """
-    recuperé, mettre a jour ou bien supprimer un objet
-    :param id:
-    :return:
-    """
+class Geolocation_Detail(APIView):
+    url_token = 'http://docker.default:5999/api/token'
 
-    try:
-        geolocation = GeoLocation.objects.get(id=id)
-    except GeoLocation.DoesNotExist:
-        return HttpResponse(status=404)
+    def get_object(self, id):
+        try:
+            return GeoLocation.objects.get(pk=id)
+        except GeoLocation.DoesNotExist:
+            raise Http404
 
-    if request.method == 'GET':
+    def get(self, request, id, format=None):
+        geolocation = self.get_object(id)
         serializer = GeoLocationSerializer(geolocation)
-        return JSONResponse(serializer.data)
-    elif request.method == 'PUT':
-        data = JSONParser().parse(request)
-        serializer = GeoLocationSerializer(geolocation, data=data)
+        return Response(serializer.data)
+
+    def put(self, request, id, format=None):
+        geolocation = self.get_object(id)
+        serializer = GeoLocationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return JSONResponse(serializer.data)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        return JSONResponse(serializer.errors, status=400)
-
-    elif request.method == 'DELETE':
+    def delete(self, request, id, format=None):
+        geolocation = self.get_object(id)
         geolocation.delete()
-        return HttpResponse(status=204)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+def time_limit(old_time):
+    difference = time() - old_time
+    sill = 10.0 * 3600
+    return difference > sill
+
+
+def get_token(url):
+    return requests.get(url).json()['token']
+
+
+def get_timestamp(url):
+    return requests.get(url).json()['timestamp']
+
+
+def get_headers(url_token):
+    timestamp_url = get_timestamp(url_token)
+    token = get_token(url_token)
+
+    if time_limit(timestamp_url):
+        token = get_token(url_token)
+
+    headers = {
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json'
+    }
+    return headers
+
+
+def get_all_uses(url_token, url_user):
+    return requests.get(url_user, headers=get_headers(url_token)).json()
+
+
+def user_get(url_token, url_user):
+    return requests.get(url_user, headers=get_headers(url_token)).json()
+
+
+def user_delete(url_token, url_user):
+    return requests.delete(url_user, headers=get_headers(url_token))
+
+
+def user_put(url_token, url_user):
+    return requests.put(url_user, headers=get_headers(url_token))
+
+
+def user_post(url_token, url_user):
+    return requests.post(url_user, headers=get_headers(url_token))
+
+
