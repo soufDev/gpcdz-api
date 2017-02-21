@@ -7,3 +7,5 @@ Supprimerait .idea/vcs.xml
 Supprimerait db.sqlite3
 Supprimerait geolocation/migrations/
 
+Supprimerait .idea/dataSources/3e29f362-62e4-464a-b2f8-87707d441f48/_src_/
+Supprimerait .idea/dataSources/3e29f362-62e4-464a-b2f8-87707d441f48/_staging_/

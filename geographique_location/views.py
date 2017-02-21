@@ -1,27 +1,13 @@
+from time import time
+
+import requests
 from django.http.response import Http404
-
-# Create your views here.
+from geographique_location.models import GeoLocation
 from rest_framework import generics, status
-
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from geolocation.models import GeoLocation
-from geolocation.serializers import GeoLocationSerializer
-
-
-from time import time
-import requests
-
-
-class GeolocationList(generics.ListCreateAPIView):
-    queryset = GeoLocation.objects.all()
-    serializer_class = GeoLocationSerializer
-
-
-class GeolocationDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = GeoLocation.objects.all()
-    serializer_class = GeoLocationSerializer
+from geographique_location.serializers import GeoLocationSerializer
 
 
 class Geolocation_List(APIView):
@@ -32,7 +18,10 @@ class Geolocation_List(APIView):
     def get(self, request, format=None):
         geolocations = GeoLocation.objects.all()
         serializer = GeoLocationSerializer(geolocations, many=True)
-        return Response(serializer.data)
+        return Response({
+            'geolocations': serializer.data,
+            'users': get_all_uses()
+        })
 
     def post(self, request, format=None):
         serializer = GeoLocationSerializer(data=request.data)
@@ -44,6 +33,7 @@ class Geolocation_List(APIView):
 
 class Geolocation_Detail(APIView):
     url_token = 'http://docker.default:5999/api/token'
+    url_user = 'http://docker.default:5999/api/users/'
 
     def get_object(self, id):
         try:
@@ -53,16 +43,24 @@ class Geolocation_Detail(APIView):
 
     def get(self, request, id, format=None):
         geolocation = self.get_object(id)
+        self.url_user += geolocation.userName_createdBy
+        createdBy = user_get(self.url_token, self.url_user)
         serializer = GeoLocationSerializer(geolocation)
-        return Response(serializer.data)
+        return Response({
+            'geolocation': serializer.data,
+            'createdBy': createdBy
+        })
 
     def put(self, request, id, format=None):
         geolocation = self.get_object(id)
-        serializer = GeoLocationSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        self.url_user += geolocation.userName_createdBy
+        user = geolocation.createdBy
+        if user_put(self.url_token, self.url_user, user):
+            serializer = GeoLocationSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, id, format=None):
         geolocation = self.get_object(id)
@@ -98,7 +96,9 @@ def get_headers(url_token):
     return headers
 
 
-def get_all_uses(url_token, url_user):
+def get_all_uses():
+    url_token = 'http://docker.default:5999/api/token'
+    url_user = 'http://docker.default:5999/api/users/'
     return requests.get(url_user, headers=get_headers(url_token)).json()
 
 
@@ -110,11 +110,11 @@ def user_delete(url_token, url_user):
     return requests.delete(url_user, headers=get_headers(url_token))
 
 
-def user_put(url_token, url_user):
-    return requests.put(url_user, headers=get_headers(url_token))
+def user_put(url_token, url_user, data):
+    return requests.put(url_user, headers=get_headers(url_token), data=data)
 
 
-def user_post(url_token, url_user):
-    return requests.post(url_user, headers=get_headers(url_token))
+def user_post(url_token, url_user, data):
+    return requests.post(url_user, headers=get_headers(url_token), data=data)
 
 
