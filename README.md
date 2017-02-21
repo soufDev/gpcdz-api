@@ -5,7 +5,7 @@ I started the unit Test but its so late, I have to sleep :p
 
 I will try to finish all for tomorrow at the same time as to day (I have to work before :D ) :p with a surprise if I can finished sure :D
 
-When I would finished, I will make a docker-compose file and a small architeture to launch a container easily
+When I would finish, I will make a docker-compose file and a small architeture to launch a container easily
 
 you would only have to type
 
