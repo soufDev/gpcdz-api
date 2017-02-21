@@ -2,24 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1f85522b-92e4-48cb-84f0-6522cc268e76" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/geographique_location/urls.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/geolocation/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/geolocation/migrations/0001_initial.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/geolocation/urls.py" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/geolocation/admin.py" afterPath="$PROJECT_DIR$/geographique_location/admin.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/geolocation/apps.py" afterPath="$PROJECT_DIR$/geographique_location/apps.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/geolocation/migrations/__init__.py" afterPath="$PROJECT_DIR$/geographique_location/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/geolocation/models.py" afterPath="$PROJECT_DIR$/geographique_location/models.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/geolocation/serializers.py" afterPath="$PROJECT_DIR$/geographique_location/serializers.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/geolocation/tests.py" afterPath="$PROJECT_DIR$/geographique_location/tests.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/geolocation/views.py" afterPath="$PROJECT_DIR$/geographique_location/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/3e29f362-62e4-464a-b2f8-87707d441f48.xml" afterPath="$PROJECT_DIR$/.idea/dataSources/3e29f362-62e4-464a-b2f8-87707d441f48.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gpcdz_api/settings.py" afterPath="$PROJECT_DIR$/gpcdz_api/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gpcdz_api/urls.py" afterPath="$PROJECT_DIR$/gpcdz_api/urls.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -138,8 +122,8 @@
       <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
-              <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+            <state relative-caret-position="168">
+              <caret line="7" column="12" lean-forward="false" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -1090,8 +1074,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+        <state relative-caret-position="168">
+          <caret line="7" column="12" lean-forward="false" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
           <folding />
         </state>
       </provider>
