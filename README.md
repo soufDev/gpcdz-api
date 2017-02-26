@@ -1,16 +1,60 @@
 #not finished yet
-February 21st 2017 01:15 ( so late )
-The Api was Finished (I hope so :) )
-I started the unit Test but its so late, I have to sleep :p
 
-I will try to finish all for tomorrow at the same time as to day (I have to work before :D ) :p with a surprise if I can finished sure :D
+to launch the container you have to copy paste this instructions
 
-When I would finish, I will make a docker-compose file and a small architeture to launch a container easily
+    docker-compose build && docker-compose up -d
 
-you would only have to type
+then if you want to create the database for the API you have to connect to the postgres container
 
-        docker-compose build && docker-compose up
+    docker exec -ti mongodbdocker_postgres_1 bash
 
-to see the result
+then copy paste this
 
-Thank you
+    psql postgres postgres
+
+then
+
+    /q
+
+after
+
+    exit
+
+after that you have to connect to django container
+
+    docker exec -ti mongodbdocker_django_1 bash
+
+then copy paste this:
+
+    python manage.py makemigrations
+
+    python manage.py migrate
+
+after that you conect to
+
+    http://localhost/geolocations
+
+=> to see all the entite have been created
+
+to see the uses whitch are stored on you mongodb container
+
+    http://locahost/users => to see all the users that you have in mongodb container
+
+or if you are running in a docker-machine like me replace localhost by your ip virtual machine
+
+to post put & delete you have to go
+
+    http://localhost/geolocation/id
+
+    http://locahost/users/id or username
+
+
+for the users post and put and delete doest not work I don't know I think its probleme with permissions
+
+
+
+
+
+
+
+
