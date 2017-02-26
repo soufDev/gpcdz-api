@@ -1,0 +1,44 @@
+nginx:
+  build: ./nginx
+  restart: always
+  ports:
+    - "80:80"
+  volumes_from:
+    - django
+  volumes:
+    - ./django/:/var/www/html/
+  links:
+    - django:django
+
+django:
+  build: ./django
+  restart: always
+  ports:
+    - "8000"
+  links:
+    - userservice:userservice
+    - postgres:postgres
+  volumes:
+    - ./django/:/usr/src/app/
+  env_file: .env
+  command: /usr/local/bin/gunicorn gpcdz_api.wsgi:application -w 3 -b :8000
+
+postgres:
+  restart: always
+  image: postgres:latest
+  ports:
+    - "5432:5432"
+
+mongo:
+  image: mongo:latest
+  restart: always
+  environment:
+    - .datadir/:/data/db
+
+userservice:
+  image: smidaamine/userservice
+  restart: always
+  ports:
+    - "5999:5999"
+  links:
+    - mongo:db
